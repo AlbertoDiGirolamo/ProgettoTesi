@@ -60,12 +60,7 @@ public class textManagement : MonoBehaviour
 
         // Set the size of the RectTransform based on the new calculated values.
         m_text.rectTransform.sizeDelta = new Vector2(size.x, size.y);
-
-
-
-
-
-        
+   
        
     }
 

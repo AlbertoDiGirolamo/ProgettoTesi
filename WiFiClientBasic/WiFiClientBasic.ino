@@ -33,13 +33,17 @@ void setup()
     delay(500);
 }
 
-
+int pr=60;
+int mod = 1;
+float temp = 36.5;
+int rr = 28;
+int SPO2 = 99;
 void loop()
 {
 //    const uint16_t port = 80;
 //    const char * host = "192.168.1.1"; // ip or dns
     const uint16_t port = 8080;
-    const char * host = "192.168.1.201"; // ip or dns
+    const char * host = "192.168.1.80"; // ip or dns
 
     Serial.print("Connecting to ");
     Serial.println(host);
@@ -58,7 +62,21 @@ void loop()
     //uncomment this line to send an arbitrary string to the server
     //client.print("Send this data to the server");
     //uncomment this line to send a basic document request to the server
-    client.print("Temperature: 14");
+    if (pr >68 or pr < 62){
+      mod = -mod;
+      temp = temp +0,3;
+      
+    }
+    if (rr > 31 or rr < 26){
+      mod = -mod;
+    }
+    rr = rr + mod;
+    pr = pr + mod;
+    
+    client.print("PR: "+ String(pr));
+    client.print("TEMP: "+String(temp));
+    client.print("SPO2: "+String(SPO2));
+    client.print("RR: "+String(rr));
 
   int maxloops = 0;
 
