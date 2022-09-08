@@ -33,8 +33,9 @@ void setup()
     delay(500);
 }
 
-int pr=60;
-int mod = 1;
+int pr=65;
+int modpr = 1;
+int modrr = 1;
 float temp = 36.5;
 int rr = 28;
 int SPO2 = 99;
@@ -63,20 +64,21 @@ void loop()
     //client.print("Send this data to the server");
     //uncomment this line to send a basic document request to the server
     if (pr >68 or pr < 62){
-      mod = -mod;
-      temp = temp +0,3;
+      modpr = -modpr;
+      temp = temp +0.3;
       
     }
     if (rr > 31 or rr < 26){
-      mod = -mod;
+      modrr = -modrr;
+      temp = temp -0.2;
     }
-    rr = rr + mod;
-    pr = pr + mod;
+    rr = rr + modrr;
+    pr = pr + modpr;
     
     client.print("PR: "+ String(pr));
-    client.print("TEMP: "+String(temp));
-    client.print("SPO2: "+String(SPO2));
-    client.print("RR: "+String(rr));
+    client.print("|TEMP: "+String(temp));
+    client.print("|SPO2: "+String(SPO2));
+    client.print("|RR: "+String(rr));
 
   int maxloops = 0;
 
@@ -101,5 +103,5 @@ void loop()
     client.stop();
 
     Serial.println("Waiting 5 seconds before restarting...");
-    delay(5000);
+    delay(1000);
 }
