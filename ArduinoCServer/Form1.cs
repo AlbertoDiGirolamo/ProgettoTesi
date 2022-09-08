@@ -42,7 +42,7 @@ namespace ArduinoCServer
 
             try
             {
-                richTextBox1.AppendText("-------Arduino Server Running-------");
+                richTextBox1.AppendText("-------Multi Parameter Monitor Data Server Running-------" + "\n");
             }
             catch (Exception ex)
             {

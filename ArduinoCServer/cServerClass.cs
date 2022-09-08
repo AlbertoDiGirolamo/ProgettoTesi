@@ -17,7 +17,7 @@ namespace ArduinoCServer
         public delegate void MessageEventHandler(cServerClass sender, string Data);
 
         //Server Control
-        public IPAddress ServerIP = IPAddress.Parse("192.168.1.201");
+        public IPAddress ServerIP = IPAddress.Parse("192.168.1.80");
         public int ServerPort = 8080;
         public TcpListener myserver;
 

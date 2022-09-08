@@ -18,3 +18,14 @@ C:\Users\alber\Desktop\ArduinoCServer\obj\Debug\ArduinoCServer.csproj.GenerateRe
 C:\Users\alber\Desktop\ArduinoCServer\obj\Debug\ArduinoCServer.csproj.CoreCompileInputs.cache
 C:\Users\alber\Desktop\ArduinoCServer\obj\Debug\ArduinoCServer.exe
 C:\Users\alber\Desktop\ArduinoCServer\obj\Debug\ArduinoCServer.pdb
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\bin\Debug\ArduinoCServer.exe.config
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\bin\Debug\ArduinoCServer.exe
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\bin\Debug\ArduinoCServer.pdb
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.csproj.AssemblyReference.cache
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.csproj.SuggestedBindingRedirects.cache
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.Form1.resources
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.Properties.Resources.resources
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.csproj.GenerateResource.cache
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.exe
+D:\Documents\GitHub\ProgettoTesi\ArduinoCServer\obj\Debug\ArduinoCServer.pdb
