@@ -80,6 +80,8 @@ void loop()
     client.print("|SPO2: "+String(SPO2));
     client.print("|RR: "+String(rr));
 
+    Serial.println("Message send: "+String("PR: ")+ String(pr)+"|TEMP: "+String(temp)+"|SPO2: "+String(SPO2)+"|RR: "+String(rr));
+
   int maxloops = 0;
 
   //wait for the server's reply to become available
@@ -102,6 +104,6 @@ void loop()
     Serial.println("Closing connection.");
     client.stop();
 
-    Serial.println("Waiting 5 seconds before restarting...");
+    Serial.println("Waiting 1 seconds before before sending a new message...");
     delay(1000);
 }
