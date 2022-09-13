@@ -28,7 +28,6 @@ public class textManagement : MonoBehaviour
     private const string k_label = "The count is <#0080ff>{0}</color>";
     private int count;
 
-    private WWW www;
     string URL;
     Dictionary<string, string> headers;
     byte[] postData;
@@ -50,7 +49,7 @@ public class textManagement : MonoBehaviour
         m_text.fontSharedMaterial = Resources.Load<Material>("Fonts & Materials/Anton SDF - Drop Shadow");
 
         // Set the size of the font.
-        m_text.fontSize = 250;
+        m_text.fontSize = 2;
 
         // Set the text
         m_text.text = "A <#0080ff>simple</color> line of text.";
@@ -60,22 +59,27 @@ public class textManagement : MonoBehaviour
 
         // Set the size of the RectTransform based on the new calculated values.
         m_text.rectTransform.sizeDelta = new Vector2(size.x, size.y);
-   
-       
+
+
     }
 
     async Task Update()
     {
 
 
+        string RR = "";
+        string PR = "";
+        string SPO2 = "";
+        string TEMP = "";
+
         string json = @"{'query':'SELECT * FROM DIGITALTWINS'}";
         json = json.Replace("'", "\"");
 
         var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var url = "https://Example2DT.api.wcus.digitaltwins.azure.net/query?api-version=2020-10-31";
+        var url = "https://multiParameterMonitorTwin.api.wcus.digitaltwins.azure.net/query?api-version=2020-10-31";
         using var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiIwYjA3ZjQyOS05ZjRiLTQ3MTQtOTM5Mi1jYzVlOGU4MGM4YjAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9lOTk2NDdkYy0xYjA4LTQ1NGEtYmY4Yy02OTkxODFiMzg5YWIvIiwiaWF0IjoxNjYxOTUxNTE2LCJuYmYiOjE2NjE5NTE1MTYsImV4cCI6MTY2MTk1NTc0MiwiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQTlCU2g4cmRPWEhJTjE0ZFpLR2RocmVCWFA3SzB3QWhmdm1sWTJ4eXZUYWxndXpHUGpOTnIwUlNmWEJnL3FHYWUiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJEaSBHaXJvbGFtbyIsImdpdmVuX25hbWUiOiJBbGJlcnRvIiwiaXBhZGRyIjoiODcuNy4yNDIuMTMwIiwibmFtZSI6IkFsYmVydG8gRGkgR2lyb2xhbW8gLSBhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsIm9pZCI6ImJhMTMwODZlLTBkNTEtNGFhMy1hZjI0LTBkNjA5ODM0ZTdjNCIsIm9ucHJlbV9zaWQiOiJTLTEtNS0yMS03OTA1MjU0NzgtMTAzNTUyNTQ0NC02ODIwMDMzMzAtMTcyNjEyMyIsInB1aWQiOiIxMDAzMjAwMDNEQjExQzk0IiwicmgiOiIwLkFRVUEzRWVXNlFnYlNrV19qR21SZ2JPSnF5bjBCd3RMbnhSSGs1TE1YbzZBeUxBRkFHdy4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJNR1ZEQ0hHTmdaelkxNFMzSTREWG82OXl1OTN2Q0VBaDI2RXZPV0V5UC1nIiwidGlkIjoiZTk5NjQ3ZGMtMWIwOC00NTRhLWJmOGMtNjk5MTgxYjM4OWFiIiwidW5pcXVlX25hbWUiOiJhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsInVwbiI6ImFsYmVydG8uZGlnaXJvbGFtbzJAc3R1ZGlvLnVuaWJvLml0IiwidXRpIjoieFVUeDRhZlI5a3F1QzBVRkxKa2ZBQSIsInZlciI6IjEuMCJ9.CyVKnAno5PhElpDl5Swkg8BB1VUzUGf7ztNW8oeC5arHJqGJYqnPe1XIP9vVbouiPS_u69WFTxAm89wfrUJ-Qw7Qy_fOH4OpD8d6U1QMj6PWPCYs6MKNjF76gkfAOH0qBH1i5aSXhxavqTOAfP-E3VkDND-bv6oB7fhmCxmMKniwL8Ct5IsXPK_HBXuY4TqhDHWkEIWy2vF5rH2PETQ6Jb9Yw2Rq2C_-6Ic6oBmP2-zG4Z-gogqpvCesKUT47v-jUc7hCJe-eMdPgCXBjSwTMlpCa4ord46M5RFPP0m3TIho2zmVBo974Q-tTCd1tRQ5f4eJvPDM7RgT6Z-OKERh7A");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiIwYjA3ZjQyOS05ZjRiLTQ3MTQtOTM5Mi1jYzVlOGU4MGM4YjAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9lOTk2NDdkYy0xYjA4LTQ1NGEtYmY4Yy02OTkxODFiMzg5YWIvIiwiaWF0IjoxNjYzMDYyNDU3LCJuYmYiOjE2NjMwNjI0NTcsImV4cCI6MTY2MzA2Njk4NSwiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQVA0STNCQTdiL0ZwdFRob2lvTndWWFJQbXlqK0k0RE8yZlYwLzZ2SFNWeUR3TjJiWWJFSnlHeFFhTzBmY3VQTGwiLCJhbXIiOlsid2lhIl0sImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJEaSBHaXJvbGFtbyIsImdpdmVuX25hbWUiOiJBbGJlcnRvIiwiaXBhZGRyIjoiMTM3LjIwNC4xMDcuMTEzIiwibmFtZSI6IkFsYmVydG8gRGkgR2lyb2xhbW8gLSBhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsIm9pZCI6ImJhMTMwODZlLTBkNTEtNGFhMy1hZjI0LTBkNjA5ODM0ZTdjNCIsIm9ucHJlbV9zaWQiOiJTLTEtNS0yMS03OTA1MjU0NzgtMTAzNTUyNTQ0NC02ODIwMDMzMzAtMTcyNjEyMyIsInB1aWQiOiIxMDAzMjAwMDNEQjExQzk0IiwicmgiOiIwLkFRVUEzRWVXNlFnYlNrV19qR21SZ2JPSnF5bjBCd3RMbnhSSGs1TE1YbzZBeUxBRkFHdy4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJNR1ZEQ0hHTmdaelkxNFMzSTREWG82OXl1OTN2Q0VBaDI2RXZPV0V5UC1nIiwidGlkIjoiZTk5NjQ3ZGMtMWIwOC00NTRhLWJmOGMtNjk5MTgxYjM4OWFiIiwidW5pcXVlX25hbWUiOiJhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsInVwbiI6ImFsYmVydG8uZGlnaXJvbGFtbzJAc3R1ZGlvLnVuaWJvLml0IiwidXRpIjoiUzM5ZVdsd0dja2E5bTJQZzJWTFBBQSIsInZlciI6IjEuMCJ9.E-woFF-tYdzoBWhjaU-ib4KpJOBFnBpP255g0x8m9tb0Am5t4bSVpxRpbhyY-7g40u3EPnXHSWl8TQ2mVJ8fho275_rnJ-je3NZKIemwGu5qnOOCsLNaf99k2iKkBu0RznrXL8K1esyw-t92u6I0o14UOD90jngwtC5Z67VlTd1_ldBKYOLG4g3q_16R7DVAgKKKfYBGhwZHMxk8sSKHwfsl7M4N6SgV4UwQz-BeT5N2Q2xnXoKxAVseQCfmXZfABBH1uhRQb7aOP7gcqzg5scEwC3MiRo3bH_2EvyED902FsAIwyGMeJSjIDQ_KyzfP-1RTzMBXpoWllDhNKkkcGg");
 
 
         var response = await client.PostAsync(url, data);
@@ -84,14 +88,44 @@ public class textManagement : MonoBehaviour
         string[] dataValue = result.Split(",");
         for (int i = 0; i < dataValue.Length; i++)
         {
-            if (dataValue[i].Contains("Temperature"))
+            if (dataValue[i].Contains("PR"))
             {
+                PR = dataValue[i].Split(':')[1];
 
-                m_text.SetText(dataValue[i]);
                 break;
             }
         }
-        
+        for (int i = 0; i < dataValue.Length; i++)
+        {
+            if (dataValue[i].Contains("RR"))
+            {
+                RR = dataValue[i].Split(':')[1];
+
+                break;
+            }
+        }
+        for (int i = 0; i < dataValue.Length; i++)
+        {
+            if (dataValue[i].Contains("SPO2"))
+            {
+                SPO2 = dataValue[i].Split(':')[1];
+
+                break;
+            }
+        }
+        for (int i = 0; i < dataValue.Length; i++)
+        {
+            if (dataValue[i].Contains("TEMP"))
+            {
+                TEMP = dataValue[i].Split(':')[1];
+
+                break;
+            }
+        }
+        m_text.SetText("PR: " + PR +
+                        "\nRR: " + RR
+                        + "\nSPO2: " + SPO2
+                        + "\nTEMP: " + TEMP);
 
         //InvokeRepeating("doPost", 2, 2);
 
