@@ -13,6 +13,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
+using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit.SpatialAwareness;
+
+using System;
+
 public class textManagement : MonoBehaviour
 {
     public enum objectType { TextMeshPro = 0, TextMeshProUGUI = 1 };
@@ -49,7 +54,7 @@ public class textManagement : MonoBehaviour
         m_text.fontSharedMaterial = Resources.Load<Material>("Fonts & Materials/Anton SDF - Drop Shadow");
 
         // Set the size of the font.
-        m_text.fontSize = 2;
+        m_text.fontSize = 1;
 
         // Set the text
         m_text.text = "A <#0080ff>simple</color> line of text.";
@@ -61,12 +66,63 @@ public class textManagement : MonoBehaviour
         m_text.rectTransform.sizeDelta = new Vector2(size.x, size.y);
 
 
+
+        // Get the first Mesh Observer available, generally we have only one registered
+        var observer = CoreServices.GetSpatialAwarenessSystemDataProvider<IMixedRealitySpatialAwarenessMeshObserver>();
+
+        // Suspends observation of spatial mesh data
+        observer.Suspend();
+
+        StartCoroutine(dataSimulationUpdate());
+
     }
 
-    async Task Update()
+
+    void Update()
     {
 
+        //Invoke("dataUpdate", 1);
+        //Invoke("dataSimulationUpdate", 1);
 
+
+    }
+
+    int pr = 65;
+    int modpr = 1;
+    int modrr = 1;
+    double temp = 36.5;
+    int rr = 28;
+    int spo2 = 99;
+    IEnumerator dataSimulationUpdate()
+    {
+        while (true)
+        {
+            if (pr > 68 || pr < 62)
+            {
+                modpr = -modpr;
+                temp = temp + 0.3;
+
+            }
+            if (rr > 31 || rr < 26)
+            {
+                modrr = -modrr;
+                temp = temp - 0.2;
+            }
+            rr = rr + modrr;
+            pr = pr + modpr;
+
+            m_text.SetText("PR: " + pr +
+                          "\nRR: " + rr
+                          + "\nSPO2: " + spo2
+                          + "\nTEMP: " + Math.Round(temp, 1));
+
+            yield return new WaitForSeconds(1);
+        }
+
+    }
+
+    async Task dataUpdate()
+    {
         string RR = "";
         string PR = "";
         string SPO2 = "";
@@ -79,7 +135,7 @@ public class textManagement : MonoBehaviour
 
         var url = "https://multiParameterMonitorTwin.api.wcus.digitaltwins.azure.net/query?api-version=2020-10-31";
         using var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiIwYjA3ZjQyOS05ZjRiLTQ3MTQtOTM5Mi1jYzVlOGU4MGM4YjAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9lOTk2NDdkYy0xYjA4LTQ1NGEtYmY4Yy02OTkxODFiMzg5YWIvIiwiaWF0IjoxNjYzMDYyNDU3LCJuYmYiOjE2NjMwNjI0NTcsImV4cCI6MTY2MzA2Njk4NSwiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQVA0STNCQTdiL0ZwdFRob2lvTndWWFJQbXlqK0k0RE8yZlYwLzZ2SFNWeUR3TjJiWWJFSnlHeFFhTzBmY3VQTGwiLCJhbXIiOlsid2lhIl0sImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJEaSBHaXJvbGFtbyIsImdpdmVuX25hbWUiOiJBbGJlcnRvIiwiaXBhZGRyIjoiMTM3LjIwNC4xMDcuMTEzIiwibmFtZSI6IkFsYmVydG8gRGkgR2lyb2xhbW8gLSBhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsIm9pZCI6ImJhMTMwODZlLTBkNTEtNGFhMy1hZjI0LTBkNjA5ODM0ZTdjNCIsIm9ucHJlbV9zaWQiOiJTLTEtNS0yMS03OTA1MjU0NzgtMTAzNTUyNTQ0NC02ODIwMDMzMzAtMTcyNjEyMyIsInB1aWQiOiIxMDAzMjAwMDNEQjExQzk0IiwicmgiOiIwLkFRVUEzRWVXNlFnYlNrV19qR21SZ2JPSnF5bjBCd3RMbnhSSGs1TE1YbzZBeUxBRkFHdy4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJNR1ZEQ0hHTmdaelkxNFMzSTREWG82OXl1OTN2Q0VBaDI2RXZPV0V5UC1nIiwidGlkIjoiZTk5NjQ3ZGMtMWIwOC00NTRhLWJmOGMtNjk5MTgxYjM4OWFiIiwidW5pcXVlX25hbWUiOiJhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsInVwbiI6ImFsYmVydG8uZGlnaXJvbGFtbzJAc3R1ZGlvLnVuaWJvLml0IiwidXRpIjoiUzM5ZVdsd0dja2E5bTJQZzJWTFBBQSIsInZlciI6IjEuMCJ9.E-woFF-tYdzoBWhjaU-ib4KpJOBFnBpP255g0x8m9tb0Am5t4bSVpxRpbhyY-7g40u3EPnXHSWl8TQ2mVJ8fho275_rnJ-je3NZKIemwGu5qnOOCsLNaf99k2iKkBu0RznrXL8K1esyw-t92u6I0o14UOD90jngwtC5Z67VlTd1_ldBKYOLG4g3q_16R7DVAgKKKfYBGhwZHMxk8sSKHwfsl7M4N6SgV4UwQz-BeT5N2Q2xnXoKxAVseQCfmXZfABBH1uhRQb7aOP7gcqzg5scEwC3MiRo3bH_2EvyED902FsAIwyGMeJSjIDQ_KyzfP-1RTzMBXpoWllDhNKkkcGg");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiIwYjA3ZjQyOS05ZjRiLTQ3MTQtOTM5Mi1jYzVlOGU4MGM4YjAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9lOTk2NDdkYy0xYjA4LTQ1NGEtYmY4Yy02OTkxODFiMzg5YWIvIiwiaWF0IjoxNjYzMTM5NzAzLCJuYmYiOjE2NjMxMzk3MDMsImV4cCI6MTY2MzE0NDgyMywiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQUo4RUhjTjNvYzJOZnEyY2cvdmNXang4dEh0dHZLbjJCUFhwM3gyaXhRSkZYSDkrcGd0enhWWFNOL1BFdFlWTEIiLCJhbXIiOlsid2lhIl0sImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJEaSBHaXJvbGFtbyIsImdpdmVuX25hbWUiOiJBbGJlcnRvIiwiaXBhZGRyIjoiMTM3LjIwNC4xMDcuMTEzIiwibmFtZSI6IkFsYmVydG8gRGkgR2lyb2xhbW8gLSBhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsIm9pZCI6ImJhMTMwODZlLTBkNTEtNGFhMy1hZjI0LTBkNjA5ODM0ZTdjNCIsIm9ucHJlbV9zaWQiOiJTLTEtNS0yMS03OTA1MjU0NzgtMTAzNTUyNTQ0NC02ODIwMDMzMzAtMTcyNjEyMyIsInB1aWQiOiIxMDAzMjAwMDNEQjExQzk0IiwicmgiOiIwLkFRVUEzRWVXNlFnYlNrV19qR21SZ2JPSnF5bjBCd3RMbnhSSGs1TE1YbzZBeUxBRkFHdy4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJNR1ZEQ0hHTmdaelkxNFMzSTREWG82OXl1OTN2Q0VBaDI2RXZPV0V5UC1nIiwidGlkIjoiZTk5NjQ3ZGMtMWIwOC00NTRhLWJmOGMtNjk5MTgxYjM4OWFiIiwidW5pcXVlX25hbWUiOiJhbGJlcnRvLmRpZ2lyb2xhbW8yQHN0dWRpby51bmliby5pdCIsInVwbiI6ImFsYmVydG8uZGlnaXJvbGFtbzJAc3R1ZGlvLnVuaWJvLml0IiwidXRpIjoiMDQxdmhlRFVLRUs0VUxQcGprSU1BQSIsInZlciI6IjEuMCJ9.tIBBIXqd0lSxHNBgAvroGTiR7h-6wd6K5gefls0sBqy4naF165OR5LmLPPbJ80SuKVtJbsStLPH4vUMwZyqsx_8LfxBof70B0j6q-HIzX-vSxL_yQOB-rIQ8thqZF4Z71xTNMVuLPqNqG2R0LAATmrb3yaLXf31TuOu4L3FdUJ_PGG_ZhdJcaZj1VHrE7BoDoinTfbV_rPhnJ8Lvw6IZ-1xRGE9Kc0IECcmXiOiWr3wu8xds3C7marUUjI0cFM8llHJ-LiY4Nk2ELYgqs114ge1bLddl_u_LICVYzGmv2Of1LLrq-pctYkcscBcEaQijPC94G8wvTGj1vJBtPNqpZg");
 
 
         var response = await client.PostAsync(url, data);
@@ -128,10 +184,6 @@ public class textManagement : MonoBehaviour
                         + "\nTEMP: " + TEMP);
 
         //InvokeRepeating("doPost", 2, 2);
-
     }
-
-
-
 
 }
