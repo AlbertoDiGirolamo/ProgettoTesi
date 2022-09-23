@@ -3,40 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+using System;
+
 public class showHologram : MonoBehaviour
 {
 
-    private GameObject m_text;
-    bool isVisible = false;
+    private TMP_Text m_text;
 
+    public GameObject txt;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_text = GameObject.Find("MultiParameterMonitor");
+
 
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+
     }
 
-    public void showHologramMethod()
+    public void whenButtonClicked()
     {
-        if (isVisible)
+        if (txt.activeInHierarchy == true)
         {
-            isVisible = false;
-            m_text.SetActive(false);
+            txt.SetActive(false);
+            update = false;
         }
-        else {
-            isVisible = true;
-            m_text.SetActive(true);
+        else
+        {
+            txt.SetActive(true);
         }
-       
     }
 
-    
+    bool update = false;
+    public bool isUpdate()
+    {
+        return update;
+    }
+    public void disableUpdate()
+    {
+        update = true;
+    }
+
 
 }

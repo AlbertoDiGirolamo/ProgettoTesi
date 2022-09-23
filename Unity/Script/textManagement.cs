@@ -23,6 +23,8 @@ public class textManagement : MonoBehaviour
     public enum objectType { TextMeshPro = 0, TextMeshProUGUI = 1 };
 
     public objectType ObjectType;
+
+    public showHologram btn;
     public bool isStatic;
 
     private TMP_Text m_text;
@@ -73,19 +75,25 @@ public class textManagement : MonoBehaviour
         // Suspends observation of spatial mesh data
         observer.Suspend();
 
+
+        btn = FindObjectOfType<showHologram>();
         StartCoroutine(dataSimulationUpdate());
 
     }
 
-
+    bool update = false;
     void Update()
     {
-
-        //Invoke("dataUpdate", 1);
-        //Invoke("dataSimulationUpdate", 1);
+        if (btn.isUpdate() == false)
+        {
+            StartCoroutine(dataSimulationUpdate());
+            btn.disableUpdate();
+        }
 
 
     }
+
+
 
     int pr = 65;
     int modpr = 1;
@@ -93,7 +101,9 @@ public class textManagement : MonoBehaviour
     double temp = 36.5;
     int rr = 28;
     int spo2 = 99;
-    IEnumerator dataSimulationUpdate()
+
+
+    public IEnumerator dataSimulationUpdate()
     {
         while (true)
         {
@@ -120,6 +130,7 @@ public class textManagement : MonoBehaviour
         }
 
     }
+
 
     async Task dataUpdate()
     {
@@ -182,8 +193,6 @@ public class textManagement : MonoBehaviour
                         "\nRR: " + RR
                         + "\nSPO2: " + SPO2
                         + "\nTEMP: " + TEMP);
-
-        //InvokeRepeating("doPost", 2, 2);
     }
 
 }
